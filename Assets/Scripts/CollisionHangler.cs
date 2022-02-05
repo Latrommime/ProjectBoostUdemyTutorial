@@ -4,8 +4,12 @@ using UnityEngine.SceneManagement;
 public class CollisionHangler : MonoBehaviour
 {
     [SerializeField] float levelLoadDelay = 1f;
+
     [SerializeField] AudioClip finishAudio;
     [SerializeField] AudioClip crashAudio;
+
+    [SerializeField] ParticleSystem finisParticle;
+    [SerializeField] ParticleSystem crashParticle;
 
     AudioSource source;
 
@@ -34,6 +38,7 @@ public class CollisionHangler : MonoBehaviour
     {
         source.Stop();
         source.PlayOneShot(finishAudio);
+        finisParticle.Play();
         GetComponent<Movement>().enabled = false;
         Invoke("LoadNextLevel", levelLoadDelay);
         isTransitioning = true;
@@ -42,6 +47,7 @@ public class CollisionHangler : MonoBehaviour
     {
         source.Stop();
         source.PlayOneShot(crashAudio);
+        crashParticle.Play();
         GetComponent<Movement>().enabled = false;
         Invoke("ReloadLevel", levelLoadDelay);
         isTransitioning = true;

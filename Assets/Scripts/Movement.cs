@@ -6,6 +6,10 @@ public class Movement : MonoBehaviour
     [SerializeField] float torque = 1000f;
     [SerializeField] AudioClip mainEngine;
 
+    [SerializeField] ParticleSystem thrustPaticle;
+    [SerializeField] ParticleSystem leftThrustParticle;
+    [SerializeField] ParticleSystem rightThrustParticle;
+
     Rigidbody rigidbody;
     AudioSource source;
 
@@ -36,9 +40,33 @@ public class Movement : MonoBehaviour
             {
                 source.PlayOneShot(mainEngine);
             }
+
+            if (x > 0f && !rightThrustParticle.isPlaying)
+            {
+                rightThrustParticle.Play();
+            }
+            else if (x < 0f && leftThrustParticle.isPlaying)
+            {
+                leftThrustParticle.Play();
+            }
+
+            if (y != 0f && !thrustPaticle.isPlaying)
+            {
+                thrustPaticle.Play();
+            }
         }
         else
         {
+            if (x == 0)
+            {
+                leftThrustParticle.Stop();
+                rightThrustParticle.Stop();
+            }
+            if (y == 0)
+            {
+                thrustPaticle.Stop();
+            }
+
             source.Stop();
         }
     }
