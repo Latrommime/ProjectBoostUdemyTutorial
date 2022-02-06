@@ -66,7 +66,6 @@ public class Movement : MonoBehaviour
             {
                 thrustPaticle.Stop();
             }
-
             source.Stop();
         }
     }

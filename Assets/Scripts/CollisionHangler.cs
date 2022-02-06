@@ -14,13 +14,19 @@ public class CollisionHangler : MonoBehaviour
     AudioSource source;
 
     bool isTransitioning = false;
+    bool isCollisionEnabled = true;
     private void Start()
     {
         source = GetComponent<AudioSource>();
     }
+    private void Update()
+    {
+        if (Application.isEditor) HandleDebugInput();
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (isTransitioning) return;
+        if (isTransitioning || !isCollisionEnabled) return;
 
         switch (collision.gameObject.tag)
         {
@@ -34,9 +40,16 @@ public class CollisionHangler : MonoBehaviour
                 break;
         }
     }
+    private void HandleDebugInput()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+            isCollisionEnabled = !isCollisionEnabled;
+        if (Input.GetKeyDown(KeyCode.L))
+            LoadNextLevel();
+    }
     void StartSuccessSequence()
     {
-        source.Stop();
+        source.Pause();
         source.PlayOneShot(finishAudio);
         finisParticle.Play();
         GetComponent<Movement>().enabled = false;
@@ -58,7 +71,6 @@ public class CollisionHangler : MonoBehaviour
 
         SceneManager.LoadScene(nextLevel);
     }
-
     void ReloadLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
